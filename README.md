@@ -13,8 +13,8 @@ O **SIGP** é um software desenvolvido como Projeto Integrador do curso de **Eng
 - **Ricardo Henrique:** Product Manager & Lead Front-end.
 - **Rafael:** Back-end Engineer.
 - **Samila:** Database Architect.
-- **Lucas:** UI/UX Designer.
-- **Maykon:** QA Engineer.
+- **Maykon:** UI/UX Designer.
+- **Lucas:** QA Engineer.
 
 ## 🎨 Identidade Visual
 Seguimos o conceito **Dark & Trust**:
