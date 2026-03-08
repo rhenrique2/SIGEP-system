@@ -1,0 +1,108 @@
+const express = require('express');
+const cors = require('cors');
+const pool = require('./db');
+const security = require('./security');
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+app.post('/usuarios', async (req, res) => {
+    // Pegamos todos os campos que a tabela usuarios possui
+    const { 
+        matricula, 
+        senha, 
+        nome_completo, 
+        cpf, 
+        data_nascimento, 
+        estado_civil, 
+        email_funcional, 
+        cargo, 
+        role 
+    } = req.body;
+
+    try {
+        // Criptografia obrigatória para o SIGEP
+        const senhaHash = await security.gerarHash(senha);
+
+        const result = await pool.query(
+            `INSERT INTO public.usuarios 
+            (matricula, senha, nome_completo, cpf, data_nascimento, estado_civil, email_funcional, cargo, role) 
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id, nome_completo`,
+            [
+                matricula, 
+                senhaHash, 
+                nome_completo, 
+                cpf, 
+                data_nascimento || null, 
+                estado_civil || 'NÃO INFORMADO', 
+                email_funcional || null, 
+                cargo || 'INSPETOR', 
+                role || 'USER'
+            ]
+        );
+
+        res.status(201).json({ 
+            mensagem: "Usuário SIGEP cadastrado com sucesso!", 
+            id: result.rows[0].id,
+            nome: result.rows[0].nome_completo 
+        });
+    } catch (err) {
+        console.error("[ERRO BANCO]:", err.message);
+        res.status(500).json({ erro: "Falha ao registrar funcionário: " + err.message });
+    }
+});
+
+// ROTA DE AUTENTICAÇÃO (LOGIN)
+const jwt = require('jsonwebtoken');
+
+app.post('/login', async (req, res) => {
+    const { matricula, senha } = req.body;
+
+    try {
+        const usuarioQuery = await pool.query(
+            'SELECT * FROM public.usuarios WHERE matricula = $1',
+            [matricula]
+        );
+
+        if (usuarioQuery.rows.length === 0) {
+            return res.status(401).json({ erro: "Credenciais inválidas." });
+        }
+
+        const usuario = usuarioQuery.rows[0];
+        const senhaValida = await security.compararSenha(senha, usuario.senha);
+
+        if (!senhaValida) {
+            return res.status(401).json({ erro: "Credenciais inválidas." });
+        }
+
+        // 2. GERANDO O TOKEN (O Crachá do SIGEP)
+        const token = jwt.sign(
+            { 
+                id: usuario.id, 
+                role: usuario.role,
+                nome: usuario.nome_completo 
+            }, 
+            process.env.JWT_SECRET, // Usa a chave que você salvou no .env
+            { expiresIn: '8h' }    // O token expira em 8 horas por segurança
+        );
+
+        // 3. RETORNANDO O TOKEN PARA O FRONT-END
+        res.json({
+            mensagem: "Login autorizado com sucesso!",
+            token: token, // Envia o código criptografado
+            usuario: {
+                nome: usuario.nome_completo,
+                role: usuario.role,
+                cargo: usuario.cargo
+            }
+        });
+
+    } catch (err) {
+        console.error("[ERRO LOGIN]:", err.message);
+        res.status(500).json({ erro: "Erro interno no servidor SIGEP." });
+    }
+});
+
+app.listen(3001, () => console.log('[SIGEP] Servidor Rodando na 3001'));
+
