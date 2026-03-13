@@ -2,13 +2,13 @@ const express = require('express');
 const cors = require('cors');
 const pool = require('./db');
 const security = require('./security');
+const auth = require('./auth');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.post('/usuarios', async (req, res) => {
-    // Pegamos todos os campos que a tabela usuarios possui
+app.post('/usuarios', auth, async (req, res) => {
     const { 
         matricula, 
         senha, 
@@ -22,7 +22,17 @@ app.post('/usuarios', async (req, res) => {
     } = req.body;
 
     try {
-        // Criptografia obrigatória para o SIGEP
+        // CRITÉRIO 1: Validação de duplicados (Evita erro 500 desnecessário)
+        const buscaDuplicado = await pool.query(
+            'SELECT id FROM public.usuarios WHERE cpf = $1 OR email_funcional = $2',
+            [cpf, email_funcional]
+        );
+
+        if (buscaDuplicado.rows.length > 0) {
+            return res.status(400).json({ erro: "CPF ou E-mail já cadastrados no sistema." });
+        }
+
+        // CRITÉRIO 2: Implementação de Hash (Você já tem, mantivemos aqui)
         const senhaHash = await security.gerarHash(senha);
 
         const result = await pool.query(
@@ -43,7 +53,7 @@ app.post('/usuarios', async (req, res) => {
         );
 
         res.status(201).json({ 
-            mensagem: "Usuário SIGEP cadastrado com sucesso!", 
+            mensagem: "Funcionário registrado com sucesso!", 
             id: result.rows[0].id,
             nome: result.rows[0].nome_completo 
         });
