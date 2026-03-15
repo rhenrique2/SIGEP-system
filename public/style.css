@@ -1,0 +1,165 @@
+/* 1. RESET E CONFIGURAÇÕES GERAIS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    /* Gradiente que vai de um azul marinho para um quase preto */
+    background: radial-gradient(circle, #001f3f 0%, #000b18 100%);
+    
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    overflow: hidden;
+}
+
+/*CONTAINER E EFEITO VIDRO (GLASSMORPHISM) */
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.login-box {
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 40px;
+    border-radius: 25px;          
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    width: 400px;
+    text-align: center;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+}
+
+/* LOGO E CABEÇALHO  */
+.logo {
+    width: 180px; 
+    margin-bottom: 15px;
+    transition: transform 0.3s ease;
+}
+
+.logo:hover { transform: scale(1.05); }
+
+.header-content { margin-bottom: 30px; }
+
+.text-top, .text-bottom {
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    opacity: 0.9;
+    font-weight: 300;
+}
+
+.main-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin: 5px 0;
+}
+
+.main-title span {
+    color: #e6e600; /* Amarelo Neon do Lucas */
+    text-shadow: 0 0 15px rgba(230, 230, 0, 0.4);
+}
+
+/* 4. FORMULÁRIO E INPUTS */
+#loginForm { width: 100%; }
+
+.input-group {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+input {
+    width: 100%;
+    padding: 14px 15px 14px 45px; /* Espaço para o ícone */
+    background: #cccccc;         /* Cinza do protótipo */
+    border: none;
+    border-radius: 8px;
+    color: #333;
+    font-weight: 600;
+    font-size: 0.9rem;
+    outline: none;
+    transition: 0.3s;
+}
+
+input:focus {
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+}
+
+/* Simulação de ícones (Usuário e Cadeado) */
+.input-group:nth-child(1)::before { content: '👤'; position: absolute; left: 15px; top: 50%; transform: translateY(-50%); z-index: 1; }
+.input-group:nth-child(2)::before { content: '🔒'; position: absolute; left: 15px; top: 50%; transform: translateY(-50%); z-index: 1; }
+
+.forgot-password {
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+.forgot-password a {
+    color: #fff;
+    font-size: 0.8rem;
+    text-decoration: none;
+    opacity: 0.7;
+}
+
+.forgot-password a:hover { opacity: 1; text-decoration: underline; }
+
+/* 5. BOTÕES */
+#btnLogin {
+    width: 100%;
+    padding: 14px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: 0.3s;
+}
+
+#btnLogin:hover {
+    background: #0056b3;
+    box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
+}
+
+.divider {
+    margin: 20px 0;
+    font-size: 0.8rem;
+    opacity: 0.5;
+    position: relative;
+}
+
+.btn-biometria {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    padding: 12px;
+    border-radius: 50px; /* Formato de pílula do Figma */
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.btn-biometria:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* 6. RODAPÉ */
+.login-footer {
+    text-align: center;
+    font-size: 0.7rem;
+    opacity: 0.6;
+    line-height: 1.5;
+}
