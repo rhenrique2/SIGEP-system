@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGEP Égide - Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <img src="assets/sigep_logo.png" alt="Logo SIGEP" class="logo">
+            
+            <div class="header-content">
+                <p class="text-top">SISTEMA INTEGRADO DE</p>
+                <h1 class="main-title">GESTÃO <span>PENITENCIÁRIA</span></h1>
+                <p class="text-bottom">CONTROLE E SEGURANÇA</p>
+            </div>
+
+            <form id="loginForm">
+                <div class="input-group">
+                    <input type="text" id="matricula" placeholder="Matrícula" required>
+                </div>
+
+                <div class="input-group">
+                    <input type="password" id="password" placeholder="Senha" required>
+                </div>
+
+                <div class="forgot-password">
+                    <a href="#">Esqueci minha senha?</a>
+                </div>
+
+                <button type="submit" id="btnLogin">ENTRAR</button>
+            </form>
+
+            <div class="divider">ou</div>
+
+            <button class="btn-biometria" id="btnBiometria">
+                ACESSO COM BIOMETRIA
+            </button>
+        </div>
+
+        <footer class="login-footer">
+            <p>🛡️ Ambiente seguro e monitorado</p>
+            <p>&copy; 2026 Égide Sistemas - Todos os direitos reservados</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
